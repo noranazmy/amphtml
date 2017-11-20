@@ -22,9 +22,6 @@
 
 import {AmpA4A} from '../../amp-a4a/0.1/amp-a4a';
 import {
-  identityEnabled,
-} from './adsense-a4a-config';
-import {
   isInManualExperiment,
 } from '../../../ads/google/a4a/traffic-experiments';
 import {isExperimentOn} from '../../../src/experiments';
@@ -64,6 +61,7 @@ import {insertAnalyticsElement} from '../../../src/extension-analytics';
 import {
   getAdSenseAmpAutoAdsExpBranch,
 } from '../../../ads/google/adsense-amp-auto-ads';
+import {validateAdSenseAdHeight} from '../../../ads/google/adsense.js'
 
 /** @const {string} */
 const ADSENSE_BASE_URL = 'https://googleads.g.doubleclick.net/pagead/ads';
@@ -181,11 +179,9 @@ export class AmpAdNetworkAdsenseImpl extends AmpA4A {
   /** @override */
   buildCallback() {
     super.buildCallback();
-    this.identityTokenPromise_ = identityEnabled(this.win) ?
-        Services.viewerForDoc(this.getAmpDoc()).whenFirstVisible()
-        .then(() => getIdentityToken(this.win, this.getAmpDoc())) :
-        Promise.resolve(
-          /**@type {!../../../ads/google/a4a/utils.IdentityToken}*/({}));
+    this.identityTokenPromise_ = Services.viewerForDoc(this.getAmpDoc())
+        .whenFirstVisible()
+        .then(() => getIdentityToken(this.win, this.getAmpDoc()));
     this.autoFormat_ =
         this.element.getAttribute('data-auto-format') || '';
 
@@ -217,6 +213,9 @@ export class AmpAdNetworkAdsenseImpl extends AmpA4A {
         isInManualExperiment(this.element);
     const width = Number(this.element.getAttribute('width'));
     const height = Number(this.element.getAttribute('height'));
+
+    validateAdSenseAdHeight(height);
+
     // Need to ensure these are numbers since width can be set to 'auto'.
     // Checking height just in case.
     const useDefinedSizes = isExperimentOn(this.win, 'as-use-attr-for-format')
