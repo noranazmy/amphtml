@@ -17,6 +17,21 @@
 import {validateData} from '../../3p/3p';
 import {setStyles} from '../../src/style';
 import {camelCaseToDash} from '../../src/string';
+import {user} from '../../src/log';
+
+/** @const {Array<number>} */
+const WHITELISTED_HEIGHTS = [150];
+
+/**
+ * Check that the <amp-ad> tag height has not been tampered with.
+ * @param {Number} height
+ */
+export function validateAdSenseAdHeight(height) {
+  user().assert(
+      WHITELISTED_HEIGHTS.includes(height),
+      'Specified height ' + height +
+          ' in <amp-ad> tag is not one of the approved heights for AdSense.');
+}
 
 /**
  * Make an adsense iframe.
@@ -28,6 +43,7 @@ export function adsense(global, data) {
   validateData(data, [],
       ['adClient', 'adSlot', 'adHost', 'adtest', 'tagOrigin', 'experimentId',
         'ampSlotIndex', 'adChannel', 'autoFormat']);
+  validateAdSenseAdHeight(data.height);
 
   if (global.context.clientId) {
     // Read by GPT for GA/GPT integration.

@@ -61,6 +61,7 @@ import {insertAnalyticsElement} from '../../../src/extension-analytics';
 import {
   getAdSenseAmpAutoAdsExpBranch,
 } from '../../../ads/google/adsense-amp-auto-ads';
+import {validateAdSenseAdHeight} from '../../../ads/google/adsense.js'
 
 /** @const {string} */
 const ADSENSE_BASE_URL = 'https://googleads.g.doubleclick.net/pagead/ads';
@@ -212,6 +213,9 @@ export class AmpAdNetworkAdsenseImpl extends AmpA4A {
         isInManualExperiment(this.element);
     const width = Number(this.element.getAttribute('width'));
     const height = Number(this.element.getAttribute('height'));
+
+    validateAdSenseAdHeight(height);
+
     // Need to ensure these are numbers since width can be set to 'auto'.
     // Checking height just in case.
     const useDefinedSizes = isExperimentOn(this.win, 'as-use-attr-for-format')
