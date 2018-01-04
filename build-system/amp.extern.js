@@ -79,6 +79,7 @@ window.context.sourceUrl;
 window.context.experimentToggles;
 window.context.master;
 window.context.isMaster;
+window.context.dataAutoFormat;
 
 // Service Holder
 window.services;

@@ -52,6 +52,7 @@ function createIframeWithApis(fixture) {
         'https://www.example.com/doubleclick.html');
     expect(context.clientId).to.match(/amp-[a-zA-Z0-9\-_.]{22,24}/);
     expect(context.container).to.equal('AMP-LIGHTBOX');
+    expect(context.dataAutoFormat).to.equal('bar');
     expect(context.data).to.deep.equal({
       width: 300,
       height: 250,

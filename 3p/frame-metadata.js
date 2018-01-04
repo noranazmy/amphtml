@@ -134,7 +134,9 @@ export function getLocation() {
  * @return {!ContextStateDef}
  */
 export function getContextState() {
-  const rawContext = allMetadata()['attributes']['_context'];
+  const metadata = allMetadata();
+  const rawContext = metadata['attributes']['_context'];
+  const autoFormat = metadata['attributes']['autoFormat'];
 
   return {
     ampcontextFilepath: rawContext['ampcontextFilepath'],
@@ -154,6 +156,7 @@ export function getContextState() {
     sourceUrl: rawContext['sourceUrl'],
     startTime: rawContext['startTime'],
     tagName: rawContext['tagName'],
+    dataAutoFormat: autoFormat,
   };
 };
 
